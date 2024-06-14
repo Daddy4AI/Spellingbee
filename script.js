@@ -1,4 +1,4 @@
-import { db, collection, addDoc, query, where, getDocs, updateDoc, doc } from '../firebase.js';
+import { db, collection, addDoc, query, where, getDocs, updateDoc, doc } from './firebase.js';
 
 document.getElementById('uploadButton').addEventListener('click', uploadWords);
 document.getElementById('neverPracticed').addEventListener('click', () => selectWords('neverPracticed'));
