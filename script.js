@@ -26,9 +26,15 @@ async function uploadWords() {
         const text = e.target.result;
         const wordList = text.split('\n');
         const collectionRef = collection(db, 'words');
+        console.log("Uploading words to Firestore..."); // Debugging
         for (let word of wordList) {
             if (word.trim() !== '') {
-                await addDoc(collectionRef, { word: word.trim(), practiced: false, incorrectCount: 0, lastTested: null });
+                try {
+                    await addDoc(collectionRef, { word: word.trim(), practiced: false, incorrectCount: 0, lastTested: null });
+                    console.log(`Uploaded word: ${word.trim()}`); // Debugging
+                } catch (error) {
+                    console.error("Error uploading word:", error); // Debugging
+                }
             }
         }
         alert('Words uploaded successfully.');
