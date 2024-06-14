@@ -27,7 +27,9 @@ async function uploadWords() {
         const wordList = text.split('\n');
         const collectionRef = collection(db, 'words');
         for (let word of wordList) {
-            await addDoc(collectionRef, { word: word.trim(), practiced: false, incorrectCount: 0, lastTested: null });
+            if (word.trim() !== '') {
+                await addDoc(collectionRef, { word: word.trim(), practiced: false, incorrectCount: 0, lastTested: null });
+            }
         }
         alert('Words uploaded successfully.');
     };
@@ -67,7 +69,7 @@ function startTest() {
 function loadWord() {
     currentWord = words[currentWordIndex];
     document.getElementById('wordIndex').innerText = currentWordIndex + 1;
-    document.getElementById('audio').src = `path/to/your/audio/files/${currentWord.word}.mp3`;
+    document.getElementById('audio').src = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${currentWord.word}&tl=en`;
     document.getElementById('spellingInput').value = '';
     document.getElementById('result').innerText = '';
 }
