@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Practice</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="management">
+            <input type="file" id="fileUpload" accept=".txt, .xls, .xlsx">
+            <button id="uploadButton">Upload Words List</button>
+        </div>
+        <div id="selection">
+            <button id="neverPracticed">Never Practiced</button>
+            <button id="incorrectPracticed">Incorrect Practiced</button>
+            <button id="allPracticed">All Practiced</button>
+        </div>
+        <div id="test">
+            <button id="startTest">Start Test</button>
+        </div>
+        <div id="testPage">
+            <audio id="audio"></audio>
+            <button id="playButton">Play</button>
+            <span id="wordIndex"></span>
+            <input type="text" id="spellingInput">
+            <div id="result"></div>
+            <button id="showButton">Show</button>
+            <button id="nextButton">Next</button>
+        </div>
+    </div>
+    <script src="firebase.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
