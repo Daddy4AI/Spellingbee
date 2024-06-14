@@ -3,12 +3,16 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+
+  apiKey: "AIzaSyBlDcn2xJTWTVftGEOptBOWLFlY4LaS-YQ",
+  authDomain: "spellingbee-935f5.firebaseapp.com",
+  projectId: "spellingbee-935f5",
+  storageBucket: "spellingbee-935f5.appspot.com",
+  messagingSenderId: "1037070024462",
+  appId: "1:1037070024462:web:59fad718924cc57371a15f",
+
+
+
 };
 
 const app = initializeApp(firebaseConfig);
