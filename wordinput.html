@@ -195,13 +195,10 @@
                 const testResults = testResultsSnapshot.val() || {};
                 console.log('Fetched test results:', testResults);
 
-                // Fetch and filter words based on incorrectCount
+                // Filter words based on incorrectCount > 0
                 const wordsToReview = [];
                 for (const word of wordArray) {
-                    const wordTestRef = child(testResultsRef, word);
-                    const wordTestSnapshot = await get(wordTestRef);
-                    const result = wordTestSnapshot.val();
-                    if (result && result.incorrectCount > 0) {
+                    if (testResults[word] && testResults[word].incorrectCount > 0) {
                         wordsToReview.push(word);
                     }
                 }
@@ -232,7 +229,7 @@
         </div>
         <button onclick="clearWordlist()">Clear Word List</button>
         <button onclick="retrieveWordList()">Retrieve Word List</button>
-        <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
+        <button onclick="modifyIncorrectCount()">修改错误为1</button>
         <button onclick="createWordReview()">Create Word Review</button> <!-- Added button -->
         <textarea id="wordListContent" readonly></textarea>
     </div>
