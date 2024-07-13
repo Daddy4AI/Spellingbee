@@ -3,7 +3,131 @@
 <head>
     <title>Spelling Bee</title>
     <style>
-        /* Your CSS styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            font-size: 30px;
+            background: url('pics/backgd01.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+        h1 {
+            margin-top: 10px;
+            margin-bottom: 3px;
+        }
+
+        #controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70%;
+            margin-top: 10px;
+        }
+        #controls label, #controls input, #controls button {
+            margin: 0 10px;
+        }
+
+        #wordNumber {
+            margin: 20px 0;
+        }
+        #spellingInput {
+            font-size: 30px;
+            padding: 10px;
+            text-transform: none;
+            autocomplete: off;
+            autocorrect: off;
+            spellcheck: false;
+            margin-top: 20px;
+            width: 50%;
+        }
+        button {
+            font-size: 30px;
+            padding: 10px 20px;
+            margin: 10px;
+        }
+        #result.correct {
+            color: green;
+        }
+        #result.incorrect {
+            color: red;
+            font-weight: bold;
+        }
+        #result {
+            margin-top: 20px;
+            white-space: pre-line;
+        }
+        #exampleSentence {
+            margin-top: 10px;
+            font-size: 30px;
+            color: blue;
+        }
+        #wordDefinition {
+            margin-top: 10px;
+            font-size: 24px;
+            color: darkgreen;
+            width: 66.67%;
+        }
+        #groupStats {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        #groupStatsTable {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        #groupStatsTable th, #groupStatsTable td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        #msgBox {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: url('pics/backgd02.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 20px;
+            border: 2px solid black;
+            z-index: 1000;
+            text-align: center;
+            color: white;
+        }
+        #version {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 16px;
+            color: black;
+        }
+        .rate-adjustment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70%;
+            margin-top: 10px;
+        }
+        .rate-adjustment label {
+            margin-right: 10px;
+        }
+        .rate-adjustment input[type="range"] {
+            margin: 0 10px;
+        }
+        #testStats {
+           font-size: 20px;
+           margin-top: 20px;
+           text-align: center;
+        }
+        #testStats p {
+           margin: 5px 0;
+        }
     </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
@@ -18,7 +142,7 @@
         const testedWordsToday = new Set();
         const incorrectWordsSet = new Set();
 
-        const apiKey = 'your-dictionary-api-key';
+        const apiKey = '4c841aa5-4903-4de1-80d6-b81c397935a9';
 
         // Initial rates
         let synthesisRate = 0.5;
@@ -349,6 +473,6 @@
         <p>恭喜你完成这组单词的测试！</p>
         <button onclick="window.location.href='index.html'">返回首页</button>
     </div>
-    <div id="version">Voice from Merriam-Webster0.8</div>
+    <div id="version">Voice from Merriam-Webster0.7</div>
 </body>
 </html>
