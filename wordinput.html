@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Word Input</title>
+    <style>
+        body {
+            background: url('pics/backgd03.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+        #container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #wordListSelector {
+            width: 200px;
+            font-size: 16px;
+        }
+        #wordListContent {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        label[for="upload"] {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #testResultsTable {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        #testResultsTable th, #testResultsTable td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getDatabase, ref, get, set, child, update } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+        import firebaseConfig from './firebaseConfig.js';
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateListSelector();
+        });
+
+        async function populateListSelector() {
+            const wordListSelector = document.getElementById('wordListSelector');
+            const wordListRef = ref(database, 'wordlist');
+
+            try {
+                const snapshot = await get(wordListRef);
+                const wordListNames = Object.keys(snapshot.val() || {});
+                wordListNames.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    wordListSelector.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error populating list selector: ", error);
+            }
+        }
+
+        document.getElementById('upload').addEventListener('change', handleFileUpload);
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            const selectedList = document.getElementById('wordListSelector').value;
+
+            reader.onload = async function(event) {
+                const words = event.target.result.split(/\r?\n/).map(word => word.trim()).filter(word => word.length > 0);
+                const wordListRef = ref(database, `wordlist/${selectedList}`);
+
+                try {
+                    await set(wordListRef, words);
+                    alert("Words uploaded successfully!");
+                } catch (error) {
+                    console.error("Error uploading words: ", error);
+                    alert("Error uploading words.");
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        window.clearWordlist = async function() {
+            const selectedList = document.getElementById('wordListSelector').value;
+            const wordListRef = ref(database, `wordlist/${selectedList}`);
+
+            try {
+                await set(wordListRef, []);
+                alert("Word list cleared successfully!");
+            } catch (error) {
+                console.error("Error clearing word list: ", error);
+                alert("Error clearing word list.");
+            }
+        };
+
+        window.retrieveWordList = async function() {
+            const selectedList = document.getElementById('wordListSelector').value;
+            const wordListRef = ref(database, `wordlist/${selectedList}`);
+            const wordListContent = document.getElementById('wordListContent');
+
+            try {
+                const snapshot = await get(wordListRef);
+                const words = snapshot.val() || [];
+                wordListContent.value = words.join('\n');
+            } catch (error) {
+                console.error("Error retrieving word list: ", error);
+                wordListContent.value = "Error retrieving word list.";
+            }
+        };
+
+        window.modifyIncorrectCount = async function() {
+            const testResultsRef = ref(database, 'testResults');
+
+            try {
+                const snapshot = await get(testResultsRef);
+                const testResults = snapshot.val() || {};
+
+                for (const word in testResults) {
+                    if (testResults[word].totalTests > 0) {
+                        if (testResults[word].incorrectCount > 0) {
+                            testResults[word].incorrectCount = 1;
+                            testResults[word].correctCount = 0;
+                        } else {
+                            testResults[word].incorrectCount = 0;
+                            testResults[word].correctCount = 1;
+                        }
+                        testResults[word].totalTests = testResults[word].incorrectCount + testResults[word].correctCount;
+                    }
+                }
+
+                await set(testResultsRef, testResults);
+                alert("Modified incorrect counts successfully!");
+            } catch (error) {
+                console.error("Error modifying incorrect counts: ", error);
+                alert("Error modifying incorrect counts.");
+            }
+        };
+    </script>
+</head>
+<body>
+    <div id="container">
+        <h1>Word Input</h1>
+        <div>
+            <label for="wordListSelector">Select Word List:</label>
+            <select id="wordListSelector"></select>
+        </div>
+        <div>
+            <label for="upload">Upload Word List:</label>
+            <input type="file" id="upload">
+        </div>
+        <button onclick="clearWordlist()">Clear Word List</button>
+        <button onclick="retrieveWordList()">Retrieve Word List</button>
+        <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
+        <textarea id="wordListContent" readonly></textarea>
+    </div>
+</body>
+</html>
