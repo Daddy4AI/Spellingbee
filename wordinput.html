@@ -56,7 +56,7 @@
     </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-        import { getDatabase, ref, get, set, child, update } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+        import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
         import firebaseConfig from './firebaseConfig.js';
 
         const app = initializeApp(firebaseConfig);
@@ -164,7 +164,8 @@
         };
 
         window.createWordReview = async function() {
-            const wordListRef = ref(database, 'wordlist');
+            const selectedList = document.getElementById('wordListSelector').value;
+            const wordListRef = ref(database, `wordlist/${selectedList}`);
             const testResultsRef = ref(database, 'testResults');
             const wordReviewRef = ref(database, 'wordreview');
 
@@ -180,7 +181,7 @@
                 const testResultsSnapshot = await get(testResultsRef);
                 const testResults = testResultsSnapshot.val() || {};
 
-                // Filter words with incorrectCount > 0
+                // Filter words with incorrectCount > 0 and maintain the order
                 const wordsToReview = wordList.filter(word => testResults[word] && testResults[word].incorrectCount > 0);
 
                 // Save the new wordreview list
@@ -206,7 +207,7 @@
         </div>
         <button onclick="clearWordlist()">Clear Word List</button>
         <button onclick="retrieveWordList()">Retrieve Word List</button>
-        <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
+        <button onclick="modifyIncorrectCount()">Make incorrectCount 1</button>
         <button onclick="createWordReview()">Create Word Review</button> <!-- Added button -->
         <textarea id="wordListContent" readonly></textarea>
     </div>
