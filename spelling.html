@@ -264,8 +264,8 @@
         window.displayWord = async function() {
             if (words.length === 0) return;
             const word = words[currentWordIndex];
-            const wordIndex = currentWordIndex + 1 + todayTestedCount;
-            const groupRelativeIndex = wordIndex;
+            //const wordIndex = currentWordIndex + 1 + todayTestedCount;
+            //const groupRelativeIndex = wordIndex;
 
             playWord(word);
             document.getElementById('wordNumber').innerText = `单词序列号: ${todayTestedCount + 1} out of ${words.length} words`;
@@ -466,6 +466,7 @@
     <input type="text" id="spellingInput" autocomplete="off" autocorrect="off" spellcheck="false">
     <p id="result"></p>
     <p id="exampleSentence"></p>
+    <div id="groupStats"></div>
     <div id="testStats">
         <p>本次测试单词数: <span id="todayTestedCount"></span></p>
         <p>当前单词序列号: <span id="currentWordIndex"></span></p>
@@ -476,6 +477,6 @@
         <p>恭喜你完成这组单词的测试！</p>
         <button onclick="window.location.href='index.html'">返回首页</button>
     </div>
-    <div id="version">Updated version 0002</div>
+    <div id="version">Updated version 0003</div>
 </body>
 </html>
