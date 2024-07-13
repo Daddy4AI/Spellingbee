@@ -162,6 +162,23 @@
                 alert("Error modifying incorrect counts.");
             }
         };
+
+        window.createWordReview = async function() {
+            const testResultsRef = ref(database, 'testResults');
+            const wordReviewRef = ref(database, 'wordreview');
+
+            try {
+                const snapshot = await get(testResultsRef);
+                const testResults = snapshot.val() || {};
+                const wordsToReview = Object.keys(testResults).filter(word => testResults[word].incorrectCount > 0);
+
+                await set(wordReviewRef, wordsToReview);
+                alert("Word review list created successfully!");
+            } catch (error) {
+                console.error("Error creating word review list: ", error);
+                alert("Error creating word review list.");
+            }
+        };
     </script>
 </head>
 <body>
@@ -178,6 +195,7 @@
         <button onclick="clearWordlist()">Clear Word List</button>
         <button onclick="retrieveWordList()">Retrieve Word List</button>
         <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
+        <button onclick="createWordReview()">Create Word Review</button> <!-- Added button -->
         <textarea id="wordListContent" readonly></textarea>
     </div>
 </body>
