@@ -170,16 +170,16 @@
             const wordReviewRef = ref(database, 'wordreview');
 
             try {
-                // Clear the current wordreview list
+                // 清空当前的 wordreview 列表
                 await set(wordReviewRef, []);
                 console.log('Cleared wordreview list');
 
-                // Get the wordlist
+                // 获取 wordlist
                 const wordListSnapshot = await get(wordListRef);
                 const wordList = wordListSnapshot.val() || [];
                 console.log('Fetched wordlist:', wordList);
 
-                // Ensure wordList is an array of words
+                // 确保 wordList 是一个数组
                 let wordArray = [];
                 if (typeof wordList === 'string') {
                     wordArray = wordList.split(/\s+/).filter(word => word.length > 0);
@@ -190,16 +190,21 @@
                 }
                 console.log('Processed wordArray:', wordArray);
 
-                // Get the test results
+                // 获取 testResults
                 const testResultsSnapshot = await get(testResultsRef);
                 const testResults = testResultsSnapshot.val() || {};
                 console.log('Fetched test results:', testResults);
 
-                // Filter words based on incorrectCount > 0
-                const wordsToReview = wordArray.filter(word => testResults[word] && testResults[word].incorrectCount > 0);
-                console.log('Filtered words to review:', wordsToReview);
+                // 过滤出 incorrectCount > 0 的单词，并按其在 wordList 中的索引排序
+                const wordsToReview = wordArray
+                    .map((word, index) => ({ word, index }))
+                    .filter(({ word }) => testResults[word] && testResults[word].incorrectCount > 0)
+                    .sort((a, b) => a.index - b.index)
+                    .map(({ word }) => word);
 
-                // Save the new wordreview list
+                console.log('Filtered and sorted words to review:', wordsToReview);
+
+                // 保存新的 wordreview 列表
                 await set(wordReviewRef, wordsToReview);
                 console.log('Saved wordreview list:', wordsToReview);
 
@@ -224,7 +229,7 @@
         </div>
         <button onclick="clearWordlist()">Clear Word List</button>
         <button onclick="retrieveWordList()">Retrieve Word List</button>
-        <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
+        <button onclick="modifyIncorrectCount()">修改错误为1</button>
         <button onclick="createWordReview()">Create Word Review</button> <!-- Added button -->
         <textarea id="wordListContent" readonly></textarea>
     </div>
