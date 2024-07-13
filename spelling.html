@@ -457,12 +457,12 @@
         <label for="mp3RateSlider">Rate:</label>
         <input type="range" id="mp3RateSlider" min="0.5" max="0.9" step="0.1" value="0.7">
     </div>
-
-    <p id="wordDefinition"></p> <!-- Definition will be displayed here -->
+    <div class="definition">
+      <p id="wordDefinition"></p> <!-- Definition will be displayed here -->
+    </div>
     <input type="text" id="spellingInput" autocomplete="off" autocorrect="off" spellcheck="false">
     <p id="result"></p>
     <p id="exampleSentence"></p>
-    <div id="groupStats"></div>
     <div id="testStats">
       <p>本次测试单词数: <span id="todayTestedCount"></span></p>
       <p>当前单词序列号: <span id="currentWordIndex"></span></p>
