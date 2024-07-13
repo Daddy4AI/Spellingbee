@@ -56,7 +56,7 @@
     </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-        import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+        import { getDatabase, ref, get, set, child } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
         import firebaseConfig from './firebaseConfig.js';
 
         const app = initializeApp(firebaseConfig);
@@ -190,16 +190,15 @@
                 }
                 console.log('Processed wordArray:', wordArray);
 
-                // Get the test results
-                const testResultsSnapshot = await get(testResultsRef);
-                const testResults = testResultsSnapshot.val() || {};
-                console.log('Fetched test results:', testResults);
-
-                // Filter words with incorrectCount > 0 and maintain the order
-                const wordsToReview = wordArray.filter(word => {
-                    const result = testResults[word];
-                    return result && result.incorrectCount > 0;
-                });
+                // Get test results for each word in the word list
+                const wordsToReview = [];
+                for (const word of wordArray) {
+                    const wordTestResult = await get(child(testResultsRef, word));
+                    const resultData = wordTestResult.val();
+                    if (resultData && resultData.incorrectCount > 0) {
+                        wordsToReview.push(word);
+                    }
+                }
                 console.log('Filtered words to review:', wordsToReview);
 
                 // Save the new wordreview list
@@ -227,7 +226,7 @@
         </div>
         <button onclick="clearWordlist()">Clear Word List</button>
         <button onclick="retrieveWordList()">Retrieve Word List</button>
-        <button onclick="modifyIncorrectCount()">修改错误为1</button>
+        <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
         <button onclick="createWordReview()">Create Word Review</button> <!-- Added button -->
         <textarea id="wordListContent" readonly></textarea>
     </div>
