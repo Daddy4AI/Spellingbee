@@ -136,6 +136,11 @@
             padding: 20px;
             border-radius: 10px;
         }
+        #timestamp {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
     </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
@@ -169,6 +174,7 @@
             updateStats();
             generateWordsToTest();
             displayProgressReview();
+            displayTimestamp();
         });
 
         async function fetchData() {
@@ -473,6 +479,11 @@
                 button.disabled = disabled;
             });
         }
+
+        function displayTimestamp() {
+            const timestamp = new Date().toLocaleString();
+            document.getElementById('timestamp').innerText = `Code was updated on ${timestamp}`;
+        }
     </script>
 </head>
 <body>
@@ -551,6 +562,7 @@
             <h2>Test Dates</h2>
             <table id="testDatesTable"></table>
         </section>
+        <div id="timestamp"></div>
     </div>
 
     <div id="msgBox" onclick="window.location.href='index.html'">
