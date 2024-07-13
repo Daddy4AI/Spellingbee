@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BeeBee's Vocabulary Exercise</title>
+    <title>Bee's Vocabulary Exercise</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
@@ -12,7 +12,7 @@
         const database = getDatabase(app);
         let wordList = [];
         let wordReview = [];
-        let totalWordsToday = 15;
+        let totalWordsToday = 4;
         let reviewPer = 20;
         let totalReviewWords = Math.floor(totalWordsToday * reviewPer / 100);
         let totalNewWords = totalWordsToday - totalReviewWords;
@@ -292,8 +292,7 @@
         window.startTest = function() {
             if (newwordsTobedone === 0 && reviewWordsTobedone === 0) {
                 localStorage.setItem('wordsToTest', JSON.stringify([]));
-                document.getElementById('msgBoxContent').innerText = "你设置的任务已经完成！但是你可以修改今天测试总数来继续测试！";
-                document.getElementById('msgBox').style.display = 'flex';
+                alert("你设置的任务已经完成！但是你可以修改今天测试总数来继续测试！");
             } else {
                 window.location.href = 'spelling.html';
             }
@@ -388,7 +387,7 @@
                 <p>
                     Total Words Today:
                     <select onchange="updateTotalWordsToday(this.value)">
-                        <option value="15">15</option>
+                        <option value="4">4</option>
                         <option value="17">17</option>
                         <option value="20">20</option>
                         <option value="25">25</option>
@@ -418,12 +417,6 @@
             <h2>Test Dates</h2>
             <table id="testDatesTable"></table>
         </section>
-    </div>
-
-    <div id="msgBox" onclick="window.location.href='index.html'">
-        <div id="msgBoxContent">
-            你设置的任务已经完成！但是你可以修改今天测试总数来继续测试！
-        </div>
     </div>
 </body>
 </html>
