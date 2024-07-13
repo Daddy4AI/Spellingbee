@@ -164,14 +164,26 @@
         };
 
         window.createWordReview = async function() {
+            const wordListRef = ref(database, 'wordlist');
             const testResultsRef = ref(database, 'testResults');
             const wordReviewRef = ref(database, 'wordreview');
 
             try {
-                const snapshot = await get(testResultsRef);
-                const testResults = snapshot.val() || {};
-                const wordsToReview = Object.keys(testResults).filter(word => testResults[word].incorrectCount > 0);
+                // Clear the current wordreview list
+                await set(wordReviewRef, []);
 
+                // Get the wordlist
+                const wordListSnapshot = await get(wordListRef);
+                const wordList = wordListSnapshot.val() || [];
+
+                // Get the test results
+                const testResultsSnapshot = await get(testResultsRef);
+                const testResults = testResultsSnapshot.val() || {};
+
+                // Filter words with incorrectCount > 0
+                const wordsToReview = wordList.filter(word => testResults[word] && testResults[word].incorrectCount > 0);
+
+                // Save the new wordreview list
                 await set(wordReviewRef, wordsToReview);
                 alert("Word review list created successfully!");
             } catch (error) {
