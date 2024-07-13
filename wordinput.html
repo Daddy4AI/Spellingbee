@@ -128,7 +128,7 @@
             try {
                 const snapshot = await get(wordListRef);
                 const words = snapshot.val() || [];
-                wordListContent.value = words.join('\n');
+                wordListContent.value = Array.isArray(words) ? words.join('\n') : words;
             } catch (error) {
                 console.error("Error retrieving word list: ", error);
                 wordListContent.value = "Error retrieving word list.";
@@ -179,9 +179,16 @@
                 const wordList = wordListSnapshot.val() || [];
                 console.log('Fetched wordlist:', wordList);
 
-                // Convert wordList to an array if it isn't one
-                const wordArray = Array.isArray(wordList) ? wordList : Object.values(wordList);
-                console.log('Converted wordArray:', wordArray);
+                // Ensure wordList is an array of words
+                let wordArray = [];
+                if (typeof wordList === 'string') {
+                    wordArray = wordList.split(/\s+/).filter(word => word.length > 0);
+                } else if (Array.isArray(wordList)) {
+                    wordArray = wordList;
+                } else {
+                    wordArray = Object.values(wordList);
+                }
+                console.log('Processed wordArray:', wordArray);
 
                 // Get the test results
                 const testResultsSnapshot = await get(testResultsRef);
