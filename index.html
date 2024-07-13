@@ -264,15 +264,18 @@
 
                 wordTable.innerHTML = '<tr><th>Index</th><th>Word</th><th>Pronunciation</th><th>Dictionary</th><th>Number of Tests</th></tr>';
 
-                wordsToShow.forEach(word => {
-                    const wordObj = wordList.find(w => w.word === word) || wordReview.find(w => w.word === word);
+                wordsToShow.forEach((word, index) => {
                     const row = wordTable.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
                     const cell3 = row.insertCell(2);
                     const cell4 = row.insertCell(3);
                     const cell5 = row.insertCell(4);
-                    cell1.textContent = wordObj ? wordObj.index + 1 : '-';
+
+                    const wordListIndex = wordList.find(w => w.word === word)?.index + 1;
+                    const wordReviewIndex = wordReview.find(w => w.word === word)?.index + 1;
+
+                    cell1.textContent = wordListIndex !== undefined ? wordListIndex : (wordReviewIndex !== undefined ? wordReviewIndex : '');
                     cell2.textContent = word;
                     cell3.innerHTML = `<button onclick="playPronunciation('${word}')">Play</button>`;
                     cell4.innerHTML = `<a href="https://www.merriam-webster.com/dictionary/${word}" target="_blank">Dictionary</a>`;
@@ -344,7 +347,7 @@
 <body>
     <div id="cover" onclick="loadMainContent()">
         欢迎 B 回来词汇训练
-        <div id="updateVersion">Update version 0002</div>
+        <div id="updateVersion">Update version 0001</div>
     </div>
 
     <div id="mainContent">
