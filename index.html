@@ -114,6 +114,28 @@
             background-color: #f2f2f2;
             background-color: rgba(255, 255, 255, 0.6);
         }
+        #msgBox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            padding: 20px;
+        }
+        #msgBoxContent {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
     </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
@@ -402,7 +424,13 @@
         }
 
         window.startTest = function() {
-            window.location.href = 'spelling.html';
+            if (newwordsTobedone === 0 && reviewWordsTobedone === 0) {
+                localStorage.setItem('wordsToTest', JSON.stringify([]));
+                document.getElementById('msgBoxContent').innerText = "你设置的任务已经完成！但是你可以修改今天测试总数来继续测试！";
+                document.getElementById('msgBox').style.display = 'flex';
+            } else {
+                window.location.href = 'spelling.html';
+            }
         };
 
         window.loadMainContent = function() {
@@ -524,5 +552,12 @@
             <table id="testDatesTable"></table>
         </section>
     </div>
+
+    <div id="msgBox" onclick="window.location.href='index.html'">
+        <div id="msgBoxContent">
+            你设置的任务已经完成！但是你可以修改今天测试总数来继续测试！
+        </div>
+    </div>
+    <div id="version">Updated version 003</div>
 </body>
 </html>
