@@ -3,29 +3,6 @@
 <head>
     <title>Bee's Vocabulary Exercise</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        #cover {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            background-color: #f0f0f0;
-            text-align: center;
-            cursor: pointer;
-        }
-        #updateVersion {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 16px;
-            color: black;
-        }
-    </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
         import { getDatabase, ref, get, child, update } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
@@ -373,7 +350,7 @@
         <div id="updateVersion">Update version 0001</div>
     </div>
 
-    <div id="mainContent" style="display: none;">
+    <div id="mainContent">
         <h1>Bee's Vocabulary Exercise</h1>
 
         <div id="loading">Loading data...</div>
