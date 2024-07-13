@@ -71,6 +71,9 @@
             font-size: 24px;
             color: darkgreen;
             width: 66.67%;
+            background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
+            padding: 10px;
+            border-radius: 5px;
         }
         #groupStats {
             font-size: 20px;
@@ -458,22 +461,21 @@
         <input type="range" id="mp3RateSlider" min="0.5" max="0.9" step="0.1" value="0.7">
     </div>
     <div class="definition">
-      <p id="wordDefinition"></p> <!-- Definition will be displayed here -->
+        <p id="wordDefinition"></p> <!-- Definition will be displayed here -->
     </div>
     <input type="text" id="spellingInput" autocomplete="off" autocorrect="off" spellcheck="false">
     <p id="result"></p>
     <p id="exampleSentence"></p>
-    <div id="groupStats"></div>
     <div id="testStats">
-      <p>本次测试单词数: <span id="todayTestedCount"></span></p>
-      <p>当前单词序列号: <span id="currentWordIndex"></span></p>
-      <p>单词总数: <span id="totalWords"></span></p>
+        <p>本次测试单词数: <span id="todayTestedCount"></span></p>
+        <p>当前单词序列号: <span id="currentWordIndex"></span></p>
+        <p>单词总数: <span id="totalWords"></span></p>
     </div>
 
     <div id="msgBox">
         <p>恭喜你完成这组单词的测试！</p>
         <button onclick="window.location.href='index.html'">返回首页</button>
     </div>
-    <div id="version">Updated version 0001</div>
+    <div id="version">Updated version 0002</div>
 </body>
 </html>

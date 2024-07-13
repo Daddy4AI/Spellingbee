@@ -137,9 +137,3 @@ button, select {
     padding: 20px;
     border-radius: 10px;
 }
-
-.definition {
-    background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
-    padding: 10px;
-    border-radius: 5px;
-}
