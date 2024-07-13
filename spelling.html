@@ -74,20 +74,8 @@
             background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
             padding: 10px;
             border-radius: 5px;
-        }
-        #groupStats {
-            font-size: 20px;
-            margin-top: 20px;
-        }
-        #groupStatsTable {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        #groupStatsTable th, #groupStatsTable td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
         #msgBox {
             display: none;
@@ -194,7 +182,6 @@
 
             todayTestedCount = testedWordsToday.size;
 
-            updateGroupStats(testedWords, notTestedWords);
             displayWord();
         }
 
@@ -264,8 +251,8 @@
         window.displayWord = async function() {
             if (words.length === 0) return;
             const word = words[currentWordIndex];
-            //const wordIndex = currentWordIndex + 1 + todayTestedCount;
-            //const groupRelativeIndex = wordIndex;
+            const wordIndex = currentWordIndex + 1 + todayTestedCount;
+            const groupRelativeIndex = wordIndex;
 
             playWord(word);
             document.getElementById('wordNumber').innerText = `单词序列号: ${todayTestedCount + 1} out of ${words.length} words`;
@@ -293,7 +280,6 @@
                 const exampleSentence = await getExampleSentence(words[currentWordIndex]);
                 document.getElementById('exampleSentence').innerText = exampleSentence;
                 saveTestResult(words[currentWordIndex], true, now).then(() => {
-                    updateGroupStatsAfterSave();
                     currentWordIndex++;
                     if (!testedWordsToday.has(words[currentWordIndex])) {
                         todayTestedCount++;
@@ -316,7 +302,6 @@
                 playWordButton.innerText = 'Test Again';
                 saveTestResult(words[currentWordIndex], false, now).then(() => {
                     addToWordReview(words[currentWordIndex]);
-                    updateGroupStatsAfterSave();
                 });
             }
         };
@@ -328,15 +313,9 @@
             msgBox.style.display = 'block';
         }
 
-        function updateGroupStatsAfterSave() {
-            const testedWords = words.filter(w => w.totalTests > 0).length;
-            const notTestedWords = words.length - testedWords;
-            updateGroupStats(testedWords, notTestedWords);
-        }
-
         window.updateTestStats = function() {
             document.getElementById('todayTestedCount').innerText = todayTestedCount;
-            document.getElementById('currentWordIndex').innerText = currentWordIndex;
+            document.getElementById('currentWordIndex').innerText = currentWordIndex + 1;
             document.getElementById('totalWords').innerText = words.length;
         }
 
@@ -348,36 +327,6 @@
             document.getElementById('result').innerText = '';
             document.getElementById('exampleSentence').innerText = '';
             document.getElementById('playWordButton').innerText = 'Play Word';
-        };
-
-        window.updateGroupStats = function(testedWords, notTestedWords) {
-            const totalTestsMap = new Map();
-            words.forEach(word => {
-                if (totalTestsMap.has(word.totalTests)) {
-                    totalTestsMap.set(word.totalTests, totalTestsMap.get(word.totalTests) + 1);
-                } else {
-                    totalTestsMap.set(word.totalTests, 1);
-                }
-            });
-
-            const tableRows = [];
-            totalTestsMap.forEach((count, totalTests) => {
-                tableRows.push(`<tr><td>${totalTests}</td><td>${count}</td></tr>`);
-            });
-
-            document.getElementById('groupStats').innerHTML = `
-                <table id="groupStatsTable">
-                    <thead>
-                        <tr>
-                            <th>测试次数</th>
-                            <th>单词数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${tableRows.join('')}
-                    </tbody>
-                </table>
-            `;
         };
 
         window.saveIncorrectWords = function() {
@@ -466,7 +415,6 @@
     <input type="text" id="spellingInput" autocomplete="off" autocorrect="off" spellcheck="false">
     <p id="result"></p>
     <p id="exampleSentence"></p>
-    <div id="groupStats"></div>
     <div id="testStats">
         <p>本次测试单词数: <span id="todayTestedCount"></span></p>
         <p>当前单词序列号: <span id="currentWordIndex"></span></p>
@@ -477,6 +425,6 @@
         <p>恭喜你完成这组单词的测试！</p>
         <button onclick="window.location.href='index.html'">返回首页</button>
     </div>
-    <div id="version">Updated version 0003</div>
+    <div id="version">Updated version 0001</div>
 </body>
 </html>
