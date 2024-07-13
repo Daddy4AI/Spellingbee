@@ -3,131 +3,7 @@
 <head>
     <title>Spelling Bee</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            font-size: 30px;
-            background: url('pics/backgd01.jpg') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-        }
-        h1 {
-            margin-top: 10px;
-            margin-bottom: 3px;
-        }
-
-        #controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 70%;
-            margin-top: 10px;
-        }
-        #controls label, #controls input, #controls button {
-            margin: 0 10px;
-        }
-
-        #wordNumber {
-            margin: 20px 0;
-        }
-        #spellingInput {
-            font-size: 30px;
-            padding: 10px;
-            text-transform: none;
-            autocomplete: off;
-            autocorrect: off;
-            spellcheck: false;
-            margin-top: 20px;
-            width: 50%;
-        }
-        button {
-            font-size: 30px;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-        #result.correct {
-            color: green;
-        }
-        #result.incorrect {
-            color: red;
-            font-weight: bold;
-        }
-        #result {
-            margin-top: 20px;
-            white-space: pre-line;
-        }
-        #exampleSentence {
-            margin-top: 10px;
-            font-size: 30px;
-            color: blue;
-        }
-        #wordDefinition {
-            margin-top: 10px;
-            font-size: 24px;
-            color: darkgreen;
-            width: 66.67%;
-        }
-        #groupStats {
-            font-size: 20px;
-            margin-top: 20px;
-        }
-        #groupStatsTable {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        #groupStatsTable th, #groupStatsTable td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-        #msgBox {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: url('pics/backgd02.jpg') no-repeat center center;
-            background-size: cover;
-            padding: 20px;
-            border: 2px solid black;
-            z-index: 1000;
-            text-align: center;
-            color: white;
-        }
-        #version {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 16px;
-            color: black;
-        }
-        .rate-adjustment {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 70%;
-            margin-top: 10px;
-        }
-        .rate-adjustment label {
-            margin-right: 10px;
-        }
-        .rate-adjustment input[type="range"] {
-            margin: 0 10px;
-        }
-        #testStats {
-           font-size: 20px;
-           margin-top: 20px;
-           text-align: center;
-        }
-        #testStats p {
-           margin: 5px 0;
-        }
+        /* Your CSS styles */
     </style>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
@@ -137,21 +13,20 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         let currentWordIndex = 0;
-        let words = [];
+        let words = JSON.parse(localStorage.getItem('wordsToTest')) || [];
         let todayTestedCount = 0;
         const testedWordsToday = new Set();
         const incorrectWordsSet = new Set();
 
-        const apiKey = '4c841aa5-4903-4de1-80d6-b81c397935a9';
+        const apiKey = 'your-dictionary-api-key';
 
         // Initial rates
         let synthesisRate = 0.5;
         let mp3Rate = 0.7;
 
         document.addEventListener('DOMContentLoaded', function() {
-            const wordsToShow = JSON.parse(localStorage.getItem('wordsToShow'));
-            if (wordsToShow) {
-                loadWords(wordsToShow);
+            if (words.length > 0) {
+                loadWords(words);
             } else {
                 fetchWords();
             }
@@ -250,7 +125,7 @@
         }
 
         window.playMerriamWebsterVoice = async function() {
-            const word = words[currentWordIndex].word;
+            const word = words[currentWordIndex];
             const audioUrl = await getAudioUrl(word);
             if (audioUrl) {
                 const audio = new Audio(audioUrl);
@@ -261,12 +136,12 @@
 
         window.displayWord = async function() {
             if (words.length === 0) return;
-            const word = words[currentWordIndex].word;
+            const word = words[currentWordIndex];
             const wordIndex = currentWordIndex + 1 + todayTestedCount;
             const groupRelativeIndex = wordIndex;
 
             playWord(word);
-            document.getElementById('wordNumber').innerText = `单词序列号: ${todayTestedCount+1} out of ${words.length} words`;
+            document.getElementById('wordNumber').innerText = `单词序列号: ${todayTestedCount + 1} out of ${words.length} words`;
             document.getElementById('spellingInput').value = '';
             document.getElementById('spellingInput').focus();
             document.getElementById('result').innerText = '';
@@ -280,7 +155,7 @@
 
         window.checkSpelling = async function() {
             const input = document.getElementById('spellingInput').value.trim().toLowerCase();
-            const word = words[currentWordIndex].word.toLowerCase();
+            const word = words[currentWordIndex].toLowerCase();
             const resultElement = document.getElementById('result');
             const playWordButton = document.getElementById('playWordButton');
             const now = new Date().toISOString();
@@ -288,20 +163,20 @@
             if (input === word) {
                 resultElement.innerText = '正确';
                 resultElement.className = 'correct';
-                const exampleSentence = await getExampleSentence(words[currentWordIndex].word);
+                const exampleSentence = await getExampleSentence(words[currentWordIndex]);
                 document.getElementById('exampleSentence').innerText = exampleSentence;
-                saveTestResult(words[currentWordIndex].word, true, now).then(() => {
+                saveTestResult(words[currentWordIndex], true, now).then(() => {
                     updateGroupStatsAfterSave();
                     currentWordIndex++;
-                    if (!testedWordsToday.has(words[currentWordIndex].word)) {
+                    if (!testedWordsToday.has(words[currentWordIndex])) {
                         todayTestedCount++;
-                        testedWordsToday.add(words[currentWordIndex].word);
+                        testedWordsToday.add(words[currentWordIndex]);
                     }
 
                     if (currentWordIndex < words.length) {
                         setTimeout(() => {
                             displayWord();
-                            playWord(words[currentWordIndex].word);
+                            playWord(words[currentWordIndex]);
                         }, 2000);
                     } else {
                         saveIncorrectWords();
@@ -309,11 +184,11 @@
                     }
                 });
             } else {
-                resultElement.innerHTML = `错误，正确的拼写为 <strong>${words[currentWordIndex].word}</strong>\n<a href="https://www.merriam-webster.com/dictionary/${words[currentWordIndex].word}" target="_blank">查询本单词</a>`;
+                resultElement.innerHTML = `错误，正确的拼写为 <strong>${words[currentWordIndex]}</strong>\n<a href="https://www.merriam-webster.com/dictionary/${words[currentWordIndex]}" target="_blank">查询本单词</a>`;
                 resultElement.className = 'incorrect';
                 playWordButton.innerText = 'Test Again';
-                saveTestResult(words[currentWordIndex].word, false, now).then(() => {
-                    addToWordReview(words[currentWordIndex].word);
+                saveTestResult(words[currentWordIndex], false, now).then(() => {
+                    addToWordReview(words[currentWordIndex]);
                     updateGroupStatsAfterSave();
                 });
             }
@@ -330,7 +205,6 @@
             const testedWords = words.filter(w => w.totalTests > 0).length;
             const notTestedWords = words.length - testedWords;
             updateGroupStats(testedWords, notTestedWords);
-
         }
 
         window.updateTestStats = function() {
@@ -340,7 +214,7 @@
         }
 
         window.retryWord = function() {
-            const word = words[currentWordIndex].word;
+            const word = words[currentWordIndex];
             playWord(word);
             document.getElementById('spellingInput').value = '';
             document.getElementById('spellingInput').focus();
@@ -475,6 +349,6 @@
         <p>恭喜你完成这组单词的测试！</p>
         <button onclick="window.location.href='index.html'">返回首页</button>
     </div>
-    <div id="version">Voice from Merriam-Webster0.7</div>
+    <div id="version">Voice from Merriam-Webster0.8</div>
 </body>
 </html>
