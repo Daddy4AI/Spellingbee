@@ -212,17 +212,17 @@
                 console.log('Sorted words to review (by totalTests and lastTested):', sortedWordsToReview);
 
                 // 映射回 wordlist 并排序
-                const finalSortedWordsToReview = sortedWordsToReview
-                    .map(word => ({ word, index: wordArray.indexOf(word) }))
-                    .filter(entry => entry.index !== -1)
-                    .sort((a, b) => a.index - b.index)
-                    .map(({ word }) => word);
+                //const finalSortedWordsToReview = sortedWordsToReview
+                //    .map(word => ({ word, index: wordArray.indexOf(word) }))
+                //    .filter(entry => entry.index !== -1)
+                //    .sort((a, b) => a.index - b.index)
+                //    .map(({ word }) => word);
 
-                console.log('Final sorted words to review (by index in wordlist):', finalSortedWordsToReview);
+                //console.log('Final sorted words to review (by index in wordlist):', finalSortedWordsToReview);
 
                 // 保存新的 wordreview 列表
-                await set(wordReviewRef, finalSortedWordsToReview);
-                console.log('Saved wordreview list:', finalSortedWordsToReview);
+                await set(wordReviewRef, sortedWordsToReview);
+                console.log('Saved wordreview list:', sortedWordsToReview);
 
                 alert("Word review list created successfully!");
             } catch (error) {
@@ -245,7 +245,7 @@
         </div>
         <button onclick="clearWordlist()">Clear Word List</button>
         <button onclick="retrieveWordList()">Retrieve Word List</button>
-        <button onclick="modifyIncorrectCount()">修改错误为1</button>
+        <button onclick="modifyIncorrectCount()">修改错误次数为1</button>
         <button onclick="createWordReview()">Create Word Review</button>
         <textarea id="wordListContent" readonly></textarea>
     </div>
