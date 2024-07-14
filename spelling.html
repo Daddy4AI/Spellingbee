@@ -292,7 +292,6 @@
                             playWord(words[currentWordIndex]);
                         }, 2000);
                     } else {
-                        saveIncorrectWords();
                         showCompletionMessage();
                     }
                 });
@@ -303,7 +302,12 @@
                 saveTestResult(words[currentWordIndex], false, now).then(() => {
                     addToWordReview(words[currentWordIndex]);
                 });
+                incorrectWordsSet.add(words[currentWordIndex]); // 添加错误的单词到 set
+                saveIncorrectWords(); // 保存错误的单词
             }
+
+
+
         };
 
         function showCompletionMessage() {
@@ -330,9 +334,22 @@
         };
 
         window.saveIncorrectWords = function() {
-            const incorrectWords = Array.from(incorrectWordsSet);
             const wordReviewRef = ref(database, 'wordreview');
-            set(wordReviewRef, incorrectWords);
+            try {
+                const snapshot = await get(wordReviewRef);
+                const currentWords = snapshot.val() || [];
+
+                // 合并现有的单词和新添加的错误单词
+                const updatedWords = Array.from(new Set([
+                    ...currentWords,
+                    ...Array.from(incorrectWordsSet).filter(word => !currentWords.includes(word))
+                ]));
+
+                await set(wordReviewRef, updatedWords);
+            } catch (error) {
+                console.error("Error saving incorrect words: ", error);
+            }
+
         };
 
         window.addToWordReview = async function(word) {
