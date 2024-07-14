@@ -195,16 +195,34 @@
                 const testResults = testResultsSnapshot.val() || {};
                 console.log('Fetched test results:', testResults);
 
-                // 过滤出 incorrectCount > 0 的单词，并按 lastTested 时间排序
+                // 过滤出 incorrectCount > 0 的单词
                 const wordsToReview = Object.keys(testResults)
-                    .filter(word => testResults[word].incorrectCount > 0)
-                    .sort((a, b) => new Date(testResults[a].lastTested) - new Date(testResults[b].lastTested));
+                    .filter(word => testResults[word].incorrectCount > 0);
 
-                console.log('Filtered and sorted words to review:', wordsToReview);
+                console.log('Filtered words to review (from testResults):', wordsToReview);
+
+                // 按 totalTests 排序（降序），再按 lastTested 时间排序（升序）
+                const sortedWordsToReview = wordsToReview
+                    .sort((a, b) => {
+                        const totalTestsDiff = testResults[b].totalTests - testResults[a].totalTests;
+                        if (totalTestsDiff !== 0) return totalTestsDiff;
+                        return new Date(testResults[a].lastTested) - new Date(testResults[b].lastTested);
+                    });
+
+                console.log('Sorted words to review (by totalTests and lastTested):', sortedWordsToReview);
+
+                // 映射回 wordlist 并排序
+                const finalSortedWordsToReview = sortedWordsToReview
+                    .map(word => ({ word, index: wordArray.indexOf(word) }))
+                    .filter(entry => entry.index !== -1)
+                    .sort((a, b) => a.index - b.index)
+                    .map(({ word }) => word);
+
+                console.log('Final sorted words to review (by index in wordlist):', finalSortedWordsToReview);
 
                 // 保存新的 wordreview 列表
-                await set(wordReviewRef, wordsToReview);
-                console.log('Saved wordreview list:', wordsToReview);
+                await set(wordReviewRef, finalSortedWordsToReview);
+                console.log('Saved wordreview list:', finalSortedWordsToReview);
 
                 alert("Word review list created successfully!");
             } catch (error) {
