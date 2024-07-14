@@ -297,6 +297,7 @@
 
                     const wordListIndex = wordList.find(w => w.word === word)?.index + 1;
                     const wordReviewIndex = wordReview.find(w => w.word === word)?.index + 1;
+                    const testResult = wordList.find(w => w.word === word) || wordReview.find(w => w.word === word);
 
                     cell1.textContent = wordListIndex !== undefined ? wordListIndex : (wordReviewIndex !== undefined ? wordReviewIndex : '');
                     cell2.textContent = word;
