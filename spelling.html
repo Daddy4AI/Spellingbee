@@ -333,7 +333,7 @@
             document.getElementById('playWordButton').innerText = 'Play Word';
         };
 
-        window.saveIncorrectWords = function() {
+        window.saveIncorrectWords = async function() {
             const wordReviewRef = ref(database, 'wordreview');
             try {
                 const snapshot = await get(wordReviewRef);
