@@ -35,7 +35,7 @@
         const database = getDatabase(app);
         let wordList = [];
         let wordReview = [];
-        let totalWordsToday = 4; // Updated default value
+        let totalWordsToday = 15; // Updated default value
         let reviewPer = 20;
         let totalReviewWords = Math.floor(totalWordsToday * reviewPer / 100);
         let totalNewWords = totalWordsToday - totalReviewWords;
@@ -393,9 +393,9 @@
                 <tbody>
                     <tr>
                         <td>Task</td>
-                        <td id="totalTask">4</td> <!-- Updated default value -->
-                        <td id="newWordsTask">3</td>
-                        <td id="reviewWordsTask">1</td>
+                        <td id="totalTask">15</td> <!-- Updated default value -->
+                        <td id="newWordsTask">12</td>
+                        <td id="reviewWordsTask">3</td>
                     </tr>
                     <tr>
                         <td>Completed</td>
@@ -405,9 +405,9 @@
                     </tr>
                     <tr>
                         <td>To Be Done</td>
-                        <td id="toBeDone">4</td> <!-- Updated default value -->
-                        <td id="newWordsTobedone">3</td>
-                        <td id="reviewWordsTobedone">1</td>
+                        <td id="toBeDone">15</td> <!-- Updated default value -->
+                        <td id="newWordsTobedone">12</td>
+                        <td id="reviewWordsTobedone">3</td>
                     </tr>
                 </tbody>
             </table>
@@ -415,8 +415,8 @@
                 <p>
                     Total Words Today:
                     <select onchange="updateTotalWordsToday(this.value)">
-                        <option value="2">2</option> <!-- Updated default and minimum value -->
-                        <option value="15">15</option>
+                        //<option value="2">2</option> <!-- Updated default and minimum value -->
+                        <option value="15" selected>15</option>
                         <option value="17">17</option>
                         <option value="20">20</option>
                         <option value="25">25</option>
