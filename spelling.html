@@ -299,8 +299,9 @@
                 resultElement.innerHTML = `错误，正确的拼写为 <strong>${words[currentWordIndex]}</strong>\n<a href="https://www.merriam-webster.com/dictionary/${words[currentWordIndex]}" target="_blank">查询本单词</a>`;
                 resultElement.className = 'incorrect';
                 playWordButton.innerText = 'Test Again';
+                addToWordReview(words[currentWordIndex]);
                 saveTestResult(words[currentWordIndex], false, now).then(() => {
-                    addToWordReview(words[currentWordIndex]);
+
                 });
                 incorrectWordsSet.add(words[currentWordIndex]); // 添加错误的单词到 set
                 saveIncorrectWords(); // 保存错误的单词
@@ -448,6 +449,6 @@
         <p>恭喜你完成这组单词的测试！</p>
         <button onclick="window.location.href='index.html'">返回首页</button>
     </div>
-    <div id="version">Updated version 0004</div>
+    <div id="version">Updated version 0005</div>
 </body>
 </html>
