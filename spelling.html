@@ -363,7 +363,13 @@
                 if (!currentWords.includes(word)) {
                     currentWords.push(word);
                     await set(wordReviewRef, currentWords);
+
+                    console.log('Added word to review list:', currentWords); // 调试信息
+
+                    console.log('Updating wordRef with dateaddtoReview:', wordRef);
                     await update(wordRef, { dateaddtoReview: new Date().toISOString() });
+                    console.log('Successfully updated wordRef with dateaddtoReview');
+
                 }
             } catch (error) {
                 console.error("Error adding word to review list: ", error);
